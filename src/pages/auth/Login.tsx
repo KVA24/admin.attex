@@ -1,7 +1,7 @@
-import {useEffect} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 import {Link, Navigate, useLocation} from 'react-router-dom'
 import {AppDispatch, RootState} from '../../redux/store'
-import {loginUser, resetAuth} from '../../redux/actions'
+import {getProfile, loginUser, resetAuth} from '../../redux/actions'
 import {useDispatch, useSelector} from 'react-redux'
 
 // form validation
@@ -13,10 +13,12 @@ import AuthLayout from '../../components/AuthPageLayout/AuthLayout'
 import AuthContainer from '../../components/AuthPageLayout/AuthContainer'
 import VerticalForm from '../../components/VerticalForm'
 import FormInput from '../../components/FormInput'
+import {useGoogleReCaptcha} from "react-google-recaptcha-v3";
 
 interface UserData {
   username: string
   password: string
+  otp: string
 }
 
 /**
@@ -53,8 +55,25 @@ const Login = () => {
     userLoggedIn: state.Auth.userLoggedIn,
   }))
 
+  const [sign, setSign] = useState("")
+  const {executeRecaptcha} = useGoogleReCaptcha();
+
+  const handleReCaptchaVerify = useCallback(async () => {
+    if (!executeRecaptcha) {
+      console.log('Execute recaptcha not yet available');
+      return;
+    }
+    const token = await executeRecaptcha();
+    setSign(token)
+  }, [executeRecaptcha]);
+
+  useEffect(() => {
+    handleReCaptchaVerify().then()
+  }, [handleReCaptchaVerify]);
+
   useEffect(() => {
     dispatch(resetAuth())
+    dispatch(getProfile())
   }, [dispatch])
 
   /*
@@ -64,6 +83,7 @@ const Login = () => {
     yup.object().shape({
       username: yup.string().required('Please enter Username'),
       password: yup.string().required('Please enter Password'),
+      otp: yup.string()
     })
   )
 
@@ -71,7 +91,8 @@ const Login = () => {
   handle form submission
   */
   const onSubmit = (formData: UserData) => {
-    dispatch(loginUser(formData['username'], formData['password']))
+    console.log(formData)
+    dispatch(loginUser(formData['username'], formData['password'], formData['otp'], sign))
   }
 
   const location = useLocation()
@@ -86,9 +107,12 @@ const Login = () => {
       <AuthContainer>
         <AuthLayout authTitle="Sign In" helpText="Enter your email address and password to access admin panel."
                     bottomLinks={<BottomLink/>}>
-          <VerticalForm<UserData> onSubmit={onSubmit} resolver={schemaResolver}
-                                  defaultValues={{username: 'attex@coderthemes.com', password: 'attex'}}>
-            <FormInput label="Email Address" type="email" name="username" className="form-input"
+          <VerticalForm<UserData>
+            onSubmit={onSubmit}
+            resolver={schemaResolver}
+            defaultValues={{username: 'attex@coderthemes.com', password: 'attex'}}
+          >
+            <FormInput label="Email Address" type="text" name="username" className="form-input"
                        placeholder="Enter your email" containerClass="mb-6 space-y-2"
                        labelClassName="font-semibold text-gray-500" required/>
 
@@ -96,12 +120,16 @@ const Login = () => {
                        className="form-input rounded-e-none" containerClass="mb-6 space-y-2"
                        labelClassName="font-semibold text-gray-500"
                        labelContainerClassName="flex justify-between items-center mb-2" required>
-              <PasswordInputChild/>
+              {/*<PasswordInputChild/>*/}
             </FormInput>
 
-            <FormInput label="Remember me" type="checkbox" name="checkbox"
-                       className="form-checkbox rounded text-primary" containerClass="mb-6" labelClassName="ms-2"
-                       defaultChecked/>
+            <FormInput label="Otp" type="text" name="otp" className="form-input"
+                       placeholder="Enter otp number" containerClass="mb-6 space-y-2"
+                       labelClassName="font-semibold text-gray-500" required/>
+
+            {/*<FormInput label="Remember me" type="checkbox" name="checkbox"*/}
+            {/*           className="form-checkbox rounded text-primary" containerClass="mb-6" labelClassName="ms-2"*/}
+            {/*           defaultChecked/>*/}
 
             <div className="text-center mb-6">
               <button className="btn bg-primary text-white" type="submit" disabled={loading}>

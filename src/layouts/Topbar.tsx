@@ -218,21 +218,21 @@ const Topbar = () => {
 					</span>
 				</button>
 
-				<div className="relative hidden lg:block">
-					<TopBarSearch />
-				</div>
+				{/*<div className="relative hidden lg:block">*/}
+				{/*	<TopBarSearch />*/}
+				{/*</div>*/}
 
 				<div className="relative ms-auto">
 					<LanguageDropdown />
 				</div>
 
-				<div className="relative lg:flex hidden">
-					<NotificationDropdown notifications={notifications} />
-				</div>
+				{/*<div className="relative lg:flex hidden">*/}
+				{/*	<NotificationDropdown notifications={notifications} />*/}
+				{/*</div>*/}
 
-				<div className="relative lg:flex hidden">
-					<AppsDropDown />
-				</div>
+				{/*<div className="relative lg:flex hidden">*/}
+				{/*	<AppsDropDown />*/}
+				{/*</div>*/}
 
 				<div className="flex">
 					<button type="button" className="nav-link p-2" onClick={handleRightSideBar}>

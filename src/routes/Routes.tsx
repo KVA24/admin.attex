@@ -42,7 +42,7 @@ const AllRoutes = (props: RouteProps) => {
             <Route
               path={route.path}
               element={
-                api.isUserAuthenticated() === false ? (
+                !api.isUserAuthenticated() ? (
                   <Navigate
                     to={{
                       pathname: '/auth/login',
