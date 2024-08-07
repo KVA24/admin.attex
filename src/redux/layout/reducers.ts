@@ -2,13 +2,13 @@
 import { LayoutActionTypes, LayoutStateTypes } from './constants'
 
 // app constants
-import { LayoutTheme, LayoutDirection, LayoutWidth, SideBarType, SideBarTheme, TopBarTheme, LayoutPosition } from '../../constants/layout'
+import { LayoutTheme, LayoutDirection, LayoutWidth, SideBarType, SideBarTheme, TopBarTheme, LayoutPosition } from '@/constants/layout'
 
 // actions
 import { LayoutActionType } from './actions'
 
 // utils
-import { getLayoutConfigs } from '../../utils/layout'
+import {getLayoutConfigs} from "@/utils";
 
 const INIT_STATE = () => {
 	const urlSearchParams = new URLSearchParams(window.location.search)

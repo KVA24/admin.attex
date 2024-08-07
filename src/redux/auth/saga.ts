@@ -2,13 +2,12 @@ import {all, fork, put, takeEvery, call} from 'redux-saga/effects'
 import {SagaIterator} from '@redux-saga/core'
 
 // apicore
-import {APICore, setAuthorization} from '../../helpers/api/apiCore'
+import {APICore, setAuthorization} from "@/helpers/api/apiCore.ts";
 
 // helpers
 import {
   getProfile as profileApi,
   login as loginApi,
-  logout as logoutApi,
   signup as signupApi,
   forgotPassword as forgotPasswordApi
 } from '../../helpers/api/auth'
@@ -23,7 +22,6 @@ interface UserData {
   payload: {
     username: string
     password: string
-    fullname: string
     email: string
     otp: string
     sign: string
@@ -86,9 +84,9 @@ function* logout(): SagaIterator {
   }
 }
 
-function* signup({payload: {fullname, email, password}}: UserData): SagaIterator {
+function* signup({payload: {email, password}}: UserData): SagaIterator {
   try {
-    const response = yield call(signupApi, {fullname, email, password})
+    const response = yield call(signupApi, {email, password})
     const user = response.data
     // api.setLoggedInUser(user);
     // setAuthorization(user['token']);

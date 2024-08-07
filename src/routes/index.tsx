@@ -6,6 +6,9 @@ import PrivateRoute from './PrivateRoute'
 
 // lazy load all the views
 
+// account
+const Account = React.lazy(() => import('../view/account/Account'))
+
 // auth
 const Login = React.lazy(() => import('../pages/auth/Login'))
 const Register = React.lazy(() => import('../pages/auth/Register'))
@@ -135,6 +138,22 @@ export interface RoutesProps {
 	header?: string
 	roles?: string[]
 	children?: RoutesProps[]
+}
+
+// myApp
+const myRoutes: RoutesProps = {
+	path: '/myApp',
+	name: 'My App',
+	icon: 'user',
+	header: 'My App',
+	children: [
+		{
+			path: '/account',
+			name: 'Account',
+			element: <Account />,
+			route: PrivateRoute,
+		},
+	],
 }
 
 // dashboards
@@ -835,7 +854,7 @@ const flattenRoutes = (routes: RoutesProps[]) => {
 }
 
 // All routes
-const authProtectedRoutes = [dashboardRoutes, ...appRoutes, customPagesRoutes, uiRoutes]
+const authProtectedRoutes = [myRoutes, dashboardRoutes, ...appRoutes, customPagesRoutes, uiRoutes]
 const publicRoutes = [...authRoutes, ...otherPublicRoutes]
 
 const authProtectedFlattenRoutes = flattenRoutes([...authProtectedRoutes])

@@ -19,7 +19,7 @@ function logout() {
   return api.create(`${baseUrl}`, {})
 }
 
-function signup(params: { fullname: string; email: string; password: string }) {
+function signup(params: { email: string; password: string }) {
   const baseUrl = '/register/'
   return api.create(`${baseUrl}`, params)
 }

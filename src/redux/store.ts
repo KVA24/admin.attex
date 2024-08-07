@@ -4,6 +4,7 @@ import createSagaMiddleware from 'redux-saga'
 // reducers
 import Layout from './layout/reducers'
 import AuthReducer from "@/redux/auth/reducers.ts";
+// import AccountReducer from "@/redux/account/reducers.ts";
 
 // saga
 import rootSaga from './sagas'
@@ -16,6 +17,7 @@ const middleware = [sagaMiddleware]
 export const store = configureStore({
   reducer: {
     Auth: AuthReducer,
+    // Account: AccountReducer,
     Layout: Layout,
   } as any,
 

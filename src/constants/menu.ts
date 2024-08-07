@@ -15,6 +15,25 @@ export interface MenuItemTypes {
 
 const MENU_ITEMS: MenuItemTypes[] = [
 	{
+		key: 'myApp',
+		label: 'My App',
+		isTitle: true,
+	},
+	{
+		key: 'myApp',
+		label: 'My App',
+		isTitle: false,
+		icon: 'ri-user-line',
+		children: [
+			{
+				key: 'myApp-account',
+				label: 'Account',
+				url: '/account',
+				parentKey: 'myyApp',
+			},
+		],
+	},
+	{
 		key: 'navigation',
 		label: 'Navigation',
 		isTitle: true,

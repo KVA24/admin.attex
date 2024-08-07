@@ -73,7 +73,6 @@ const Login = () => {
 
   useEffect(() => {
     dispatch(resetAuth())
-    // dispatch(getProfile())
   }, [dispatch])
 
   /*

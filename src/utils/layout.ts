@@ -1,5 +1,5 @@
 // app constants
-import { SideBarType, LayoutWidth } from '../constants/layout'
+import { SideBarType, LayoutWidth } from '@/constants/layout'
 
 interface ConfigTypes {
 	leftSideBarTypes: SideBarType.LEFT_SIDEBAR_TYPE_COMPACT | SideBarType.LEFT_SIDEBAR_TYPE_DEFAULT | SideBarType.LEFT_SIDEBAR_TYPE_HIDDEN | SideBarType.LEFT_SIDEBAR_TYPE_HOVER | SideBarType.LEFT_SIDEBAR_TYPE_HOVERACTIVE | SideBarType.LEFT_SIDEBAR_TYPE_MOBILE | SideBarType.LEFT_SIDEBAR_TYPE_SMALL

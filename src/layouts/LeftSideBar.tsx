@@ -8,7 +8,7 @@ import LogoBox from '../components/LogoBox'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../redux/store'
 import { changeSideBarType } from '../redux/actions'
-import { SideBarType } from '../constants'
+import { SideBarType } from '@/constants'
 
 /* Sidebar content */
 const SideBarContent = () => {
