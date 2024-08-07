@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useState} from 'react'
 import {Link, Navigate, useLocation} from 'react-router-dom'
 import {AppDispatch, RootState} from '../../redux/store'
-import {getProfile, loginUser, resetAuth} from '../../redux/actions'
+import {loginUser, resetAuth} from '../../redux/actions'
 import {useDispatch, useSelector} from 'react-redux'
 
 // form validation
@@ -73,7 +73,7 @@ const Login = () => {
 
   useEffect(() => {
     dispatch(resetAuth())
-    dispatch(getProfile())
+    // dispatch(getProfile())
   }, [dispatch])
 
   /*
@@ -91,7 +91,6 @@ const Login = () => {
   handle form submission
   */
   const onSubmit = (formData: UserData) => {
-    console.log(formData)
     dispatch(loginUser(formData['username'], formData['password'], formData['otp'], sign))
   }
 
@@ -105,14 +104,13 @@ const Login = () => {
       {(userLoggedIn || user) && <Navigate to={redirectUrl}/>}
 
       <AuthContainer>
-        <AuthLayout authTitle="Sign In" helpText="Enter your email address and password to access admin panel."
-                    bottomLinks={<BottomLink/>}>
+        <AuthLayout authTitle="Sign In" helpText="Enter your email or username and password to access.">
           <VerticalForm<UserData>
             onSubmit={onSubmit}
             resolver={schemaResolver}
-            defaultValues={{username: 'attex@coderthemes.com', password: 'attex'}}
+            defaultValues={{username: 'admin', password: 'admin123456'}}
           >
-            <FormInput label="Email Address" type="text" name="username" className="form-input"
+            <FormInput label="Username" type="text" name="username" className="form-input"
                        placeholder="Enter your email" containerClass="mb-6 space-y-2"
                        labelClassName="font-semibold text-gray-500" required/>
 
@@ -133,7 +131,11 @@ const Login = () => {
 
             <div className="text-center mb-6">
               <button className="btn bg-primary text-white" type="submit" disabled={loading}>
-                Log In
+                {loading ? <div
+                  className="animate-spin w-5 h-5 border-[3px] border-current border-t-transparent text-secondary rounded-full"
+                  role="status" aria-label="loading">
+                  <span className="sr-only">Loading...</span>
+                </div> : "Log In"}
               </button>
             </div>
           </VerticalForm>

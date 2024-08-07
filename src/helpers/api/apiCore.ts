@@ -24,6 +24,7 @@ axios.interceptors.response.use(
       switch (error.response.status) {
         case 401:
           message = 'Invalid credentials'
+          window.location.href = '/auth/login'
           break
         case 403:
           message = 'Access Forbidden'
@@ -43,20 +44,26 @@ axios.interceptors.response.use(
   }
 )
 
-const AUTH_SESSION_KEY = 'attex_user'
+const AUTH_SESSION_KEY = 'user'
+const AUTH_NAME = 'token'
 
 /**
  * Sets the default authorization
  * @param {*} token
  */
 const setAuthorization = (token: string | null) => {
-  if (token) axios.defaults.headers.common['Authorization'] = 'Bear ' + token
+  if (token) axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
   else delete axios.defaults.headers.common['Authorization']
 }
 
 const getUserFromCookie = () => {
   const user = sessionStorage.getItem(AUTH_SESSION_KEY)
   return user ? (typeof user == 'object' ? user : JSON.parse(user)) : null
+}
+
+const getTokenFromCookie = () => {
+  const token = sessionStorage.getItem(AUTH_NAME)
+  return token ? token : null
 }
 
 class APICore {
@@ -179,15 +186,18 @@ class APICore {
 
     if (!user) {
       return false
-    }
-    const decoded: any = jwtDecode(user.token)
-    const currentTime = Date.now() / 1000
-    if (decoded.exp < currentTime) {
-      console.warn('access token expired')
-      return false
     } else {
       return true
     }
+
+    // const decoded: any = jwtDecode(user.token)
+    // const currentTime = Date.now() / 1000
+    // if (decoded.exp < currentTime) {
+    //   console.warn('access token expired')
+    //   return false
+    // } else {
+    //   return true
+    // }
   }
 
   setLoggedInUser = (session: any) => {
@@ -196,6 +206,14 @@ class APICore {
       sessionStorage.removeItem(AUTH_SESSION_KEY)
     }
   }
+
+  setLoggedInToken = (session: any) => {
+    if (session) sessionStorage.setItem(AUTH_NAME, session)
+    else {
+      sessionStorage.removeItem(AUTH_NAME)
+    }
+  }
+
   /**
    * Returns the logged in user
    */
@@ -215,12 +233,17 @@ class APICore {
 /*
 Check if token available in session
 */
-const user = getUserFromCookie()
-if (user) {
-  const {token} = user
-  if (token) {
-    setAuthorization(token)
-  }
+// const user = getUserFromCookie()
+// if (user) {
+//   const {token} = user
+//   if (token) {
+//     setAuthorization(token)
+//   }
+// }
+
+const token = getTokenFromCookie()
+if (token) {
+  setAuthorization(token)
 }
 
 export {APICore, setAuthorization}

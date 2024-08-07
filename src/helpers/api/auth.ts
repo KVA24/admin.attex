@@ -5,13 +5,12 @@ const api = new APICore()
 //&sign=${params.sign}
 // account
 function getProfile() {
-  console.log('getProfile()')
-  const baseUrl = `https://jsonplaceholder.typicode.com/posts`
+  const baseUrl = `/v1/portal/_me`
   return api.get(`${baseUrl}`, {})
 }
 
 function login(params: { username: string; password: string, otp: string, sign: string }) {
-  const baseUrl = `/login/`
+  const baseUrl = `/v1/portal/auth/login?sign=${params.sign}`
   return api.create(`${baseUrl}`, params)
 }
 

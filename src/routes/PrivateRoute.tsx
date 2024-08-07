@@ -16,7 +16,7 @@ const PrivateRoute = ({ component: Component, roles, ...rest }: any) => {
 		<Route
 			{...rest}
 			render={(props: RouteProps) => {
-				if (api.isUserAuthenticated() === false) {
+				if (!api.isUserAuthenticated()) {
 					// not logged in so redirect to login page with the return url
 					return (
 						<Navigate

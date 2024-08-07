@@ -1,17 +1,23 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import AllRoutes from './routes/Routes'
-import { configureFakeBackend } from './helpers'
-
-// styles
 import 'gridjs/dist/theme/mermaid.min.css'
 import './index.scss'
 import config from './config'
 import {GoogleReCaptchaProvider} from "react-google-recaptcha-v3";
-
-// configure fake backend
-configureFakeBackend()
+import {useDispatch} from "react-redux";
+import {getProfile} from "@/redux/auth/actions.ts";
 
 const App = () => {
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		console.log("Start")
+		const token = sessionStorage.getItem("token")
+		if (token) {
+			dispatch(getProfile())
+		}
+	}, []);
+
 	return (
 		<React.Fragment>
 			<GoogleReCaptchaProvider

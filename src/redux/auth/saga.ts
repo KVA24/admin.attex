@@ -41,10 +41,12 @@ const api = new APICore()
 function* getProfile(): SagaIterator {
   try {
     const response = yield call(profileApi)
-    console.log(response)
-    yield put(authApiResponseSuccess(AuthActionTypes.GET_DATA_USER, {}))
+    const profile = response.data
+    api.setLoggedInUser(profile)
   } catch (error: any) {
-    yield put(authApiResponseError(AuthActionTypes.GET_DATA_USER, error))
+    api.setLoggedInToken(null)
+    api.setLoggedInUser(null)
+    setAuthorization(null)
   }
 }
 
@@ -55,12 +57,14 @@ function* getProfile(): SagaIterator {
 
 function* login({payload: {username, password, otp, sign}}: UserData): SagaIterator {
   try {
-    const response = yield call(loginApi, {username, password, otp, sign})
-    console.log(response)
-    const user = response.data
-    api.setLoggedInUser(user)
-    setAuthorization(user['token'])
-    yield put(authApiResponseSuccess(AuthActionTypes.LOGIN_USER, user))
+    const res1 = yield call(loginApi, {username, password, otp, sign})
+    const auth = res1.data
+    setAuthorization(auth.accessToken)
+    const res2 = yield call(profileApi)
+    const profile = res2.data
+    api.setLoggedInToken(auth.accessToken)
+    api.setLoggedInUser(profile)
+    yield put(authApiResponseSuccess(AuthActionTypes.LOGIN_USER, profile))
   } catch (error: any) {
     yield put(authApiResponseError(AuthActionTypes.LOGIN_USER, error))
     api.setLoggedInUser(null)
@@ -73,7 +77,7 @@ function* login({payload: {username, password, otp, sign}}: UserData): SagaItera
  */
 function* logout(): SagaIterator {
   try {
-    yield call(logoutApi)
+    // yield call(logoutApi)
     api.setLoggedInUser(null)
     setAuthorization(null)
     yield put(authApiResponseSuccess(AuthActionTypes.LOGOUT_USER, {}))

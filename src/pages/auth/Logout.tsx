@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../redux/store'
+import {AppDispatch} from "@/redux/store.ts";
 import { logoutUser, resetAuth } from '../../redux/actions'
 
 // components

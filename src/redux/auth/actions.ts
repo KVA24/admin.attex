@@ -37,6 +37,7 @@ export const authApiResponseError = (actionType: string, error: string): AuthAct
 
 export const getProfile = () => ({
   type: AuthActionTypes.GET_DATA_USER,
+  payload: {}
 })
 
 export const loginUser = (username: string, password: string, otp: string, sign: string): AuthActionType => ({
